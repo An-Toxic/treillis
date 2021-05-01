@@ -53,7 +53,7 @@ public class CanvasResizable extends StackPane {
 
         });
         redraw();
-        drawBorders();
+       
       
     }
     //dessiner un segment en faisant un click + drag de la souris
@@ -61,6 +61,7 @@ public class CanvasResizable extends StackPane {
     //un deuxieme point est place sur la fin de la drag
 
     public void drawLine() {
+        if(mainInterface.bsegment.isSelected()){
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 
@@ -91,6 +92,7 @@ public class CanvasResizable extends StackPane {
             }
 
         });
+    }
     }
 
     //clears the canvas
@@ -143,10 +145,9 @@ public class CanvasResizable extends StackPane {
 
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, width, height);
+        drawBorders();
 
-        gc.setStroke(Color.RED);
-        gc.strokeLine(0, 0, width, height);
-        gc.strokeLine(0, height, width, 0);
+      
 
     }
 

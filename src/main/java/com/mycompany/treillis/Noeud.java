@@ -33,6 +33,9 @@ import javafx.scene.canvas.GraphicsContext;
     public int getId(){
         return this.id;
     }
+     public void setId(int n) {
+        this.id = n;
+    }
     abstract public void save(BufferedWriter out)throws IOException;
     
     

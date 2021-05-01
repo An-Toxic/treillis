@@ -33,7 +33,12 @@ public class Barre {
         type =new TypeBar(5,5,5,5,5);
 
     }
-
+    public Barre(int identite ,TypeBar typeb, Noeud N1,Noeud N2){
+        id = identite;
+        type=typeb;
+        n1=N1;
+        n2=N2;
+    }
     //determiner la longueur d'une barre
     public double barLenght() {
         double a = (n1.getPx() - n2.getPx()) * (n1.getPx() - n2.getPx()) + (n1.getPy() - n2.getPy()) * (n1.getPy() - n2.getPy());
@@ -46,9 +51,17 @@ public class Barre {
         return acos(alpha);
 
     }
-
+    public boolean equals(Barre b){
+        if (n1.equals(b.n1)&&n2.equals(b.n2)||n1.equals(b.n2)&&n2.equals(b.n1)){
+            return true;
+        }
+        return false;
+    }
     public int getId() {
         return id;
+    }
+    public TypeBar getType(){
+        return this.type;
     }
 
     public void setId(int identite) {

@@ -47,9 +47,7 @@ public class Noeud_simple extends Noeud {
 
     }
 
-    public void setId(int n) {
-        this.id = n;
-    }
+   
 
     public void save(BufferedWriter out) throws IOException {
         //format Noeud_simple;id;x;y;

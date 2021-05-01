@@ -20,6 +20,9 @@ public class Matrice {
             }
         }
     }
+    public Matrice(int ligne){
+        this.nbrLig=ligne;
+    }
 
     public static Matrice identite(int n) {
         Matrice nouv = new Matrice(n, n);

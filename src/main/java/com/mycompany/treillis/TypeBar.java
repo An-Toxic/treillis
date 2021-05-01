@@ -29,6 +29,10 @@ public class TypeBar {
         rcompression = rc;
 
     }
+    public void setId(int identite){
+        id=identite;
+        
+    }
 
     public void save(BufferedWriter out) throws IOException {
         try {

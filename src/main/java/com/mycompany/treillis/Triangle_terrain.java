@@ -7,6 +7,7 @@ package com.mycompany.treillis;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  *
@@ -32,7 +33,20 @@ public class Triangle_terrain {
         seg31 = new Segment_terrain(pt3, pt1);
         tbpoint = new Point[]{pt1, pt2, pt3};
     }
-
+     public Triangle_terrain(int identite,Point p1, Point p2, Point p3) {
+         id=identite;
+        pt1 = p1;
+        pt2 = p2;
+        pt3 = p3;
+        seg12 = new Segment_terrain(pt1, pt2);
+        seg23 = new Segment_terrain(pt2, pt3);
+        seg31 = new Segment_terrain(pt3, pt1);
+        tbpoint = new Point[]{pt1, pt2, pt3};
+    }
+    
+public void setId(int identite){
+    this.id=identite;
+}
     public void save(BufferedWriter out) throws IOException {
         //format Triangle;id;(p1x,p1y);(p2x,p2y);(p3x,p3y);
         try {
@@ -45,6 +59,11 @@ public class Triangle_terrain {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
+    public void drawTriangle(GraphicsContext gc){
+        seg12.DrawSegment(gc);
+        seg23.DrawSegment(gc);
+        seg31.DrawSegment(gc);
     }
 
 }
