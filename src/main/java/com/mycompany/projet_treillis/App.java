@@ -16,13 +16,12 @@ public class App extends Application {
     public void start(Stage stage) {
        stage.setTitle("test javafx");
        Scene scene = new Scene(new Interface_graphique());
+       
        stage.sizeToScene();
         stage.setScene(scene);
         stage.show();
     }
-    public void showPopup(){
-        
-    }
+    
 
     public static void main(String[] args) {
         launch();

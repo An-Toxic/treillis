@@ -33,10 +33,19 @@ public class TypeBar {
         id=identite;
         
     }
+    public void setType(double c, double L, double l, double rt, double rc){
+        cout = c;
+        lmax = L;
+        lmin = l;
+        rtraction = rt;
+        rcompression = rc;
+
+    }
 
     public void save(BufferedWriter out) throws IOException {
         try {
             out.append("TypeBarre;");
+            out.append(id+ ";");
             out.append(cout + ";");
             out.append(lmin + ";");
             out.append(lmax + ";");

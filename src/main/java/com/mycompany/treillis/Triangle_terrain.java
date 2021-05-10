@@ -7,6 +7,7 @@ package com.mycompany.treillis;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.text.NumberFormat;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -49,6 +50,7 @@ public void setId(int identite){
 }
     public void save(BufferedWriter out) throws IOException {
         //format Triangle;id;(p1x,p1y);(p2x,p2y);(p3x,p3y);
+        
         try {
             out.append("Triangle;");
             out.append(id + ";(");

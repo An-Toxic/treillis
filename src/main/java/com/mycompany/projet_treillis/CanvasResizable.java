@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import com.mycompany.treillis.Point;
+import java.text.DecimalFormat;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -111,6 +112,7 @@ public class CanvasResizable extends StackPane {
 
     //placer un point en clickant avec la souris
     public void placePoint() {
+        DecimalFormat numberFormat = new DecimalFormat("#.0");
 
         this.canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent me) -> {
             final Point p;
@@ -119,6 +121,8 @@ public class CanvasResizable extends StackPane {
             gc.fillOval(me.getX(), me.getY(), 10, 10);
             p = new Point(me.getX(), me.getY());
             mainInterface.addPointMain(p);
+            mainInterface.textarea.appendText("P"+mainInterface.treillis.listPoint.indexOf(p)+
+                    "("+numberFormat.format(p.getPx())+","+numberFormat.format(p.getPy())+")\n");
             System.out.println("x point"+p.getPx() + "y point " + p.getPy());
             System.out.println("id point"+p.getId());
 
@@ -128,12 +132,15 @@ public class CanvasResizable extends StackPane {
 
     //placer un noeud simple en clickant avec la souris
     public void placeNoeudSimple() {
+        DecimalFormat numberFormat = new DecimalFormat("#.0");
         this.canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent me) -> {
             final Noeud_simple n;
             this.canvas.getGraphicsContext2D().setStroke(Color.BLACK);
             this.canvas.getGraphicsContext2D().fillOval(me.getX(), me.getY(), 15, 15);
             n = new Noeud_simple(me.getX(), me.getY());
             mainInterface.addNoeudSimple(n);
+            mainInterface.textarea.appendText("NS"+mainInterface.treillis.listNoeud.indexOf(n)+
+                    ";("+numberFormat.format(n.getPx())+","+numberFormat.format(n.getPy())+")\n");
             System.out.println("id noeud"+  n.getId());
         });
     }

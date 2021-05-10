@@ -194,6 +194,21 @@ public class Treillis {
                     addBarre(b);
                     b.drawBarre(gc);
                 }
+                if (string[0].equals("TypeBarre")){
+                    int identite = Integer.parseInt(string[1]);
+                    double cout =Double.parseDouble(string[2]);
+                    double lmin = Double.parseDouble(string[3]);
+                    double lmax=Double.parseDouble(string[4]);
+                    double rt=Double.parseDouble(string[5]);
+                    double rc=Double.parseDouble(string[6]);
+                    
+                    TypeBar typeb=new TypeBar(identite,lmax,lmin,rt,rc);
+                    this.addTypebar(typeb);
+                    num.objtoKey.put(typeb, identite);
+                    num.keytoObj.put(identite,typeb);
+                    
+                    
+                }
                 if (string[0].equals("Triangle")) {
                     int identite = Integer.parseInt(string[1]);
                     String s1 = string[2].substring(1, string[2].length() - 1);
@@ -231,7 +246,7 @@ public class Treillis {
 //calcul la matrice des inconnues du treillis
 
     public Matrice calculMatrice1() {
-        matrice = new Matrice(2 * listNoeud.size(), listNoeud.size() + 3);
+        matrice = new Matrice(2 * listNoeud.size(), listNoeud.size() +this.nombreNA());
         //pour chaque noeud du treillis on remplit deux lignes de la matrice
         for (Noeud s : listNoeud) {
             int i = 0;
@@ -269,10 +284,26 @@ public class Treillis {
         matrice.toString();
         return matrice;
     }
+   
 
-    public Matrice calculMatrice2() {
+    public ResSys resMatrice2() {
         double[] tab = new double[calculMatrice1().nbrLig];
+        Matrice second = Matrice.creeVecteur(tab);
+        
+        Matrice fin=calculMatrice1().concatCol(second);
+        return fin.resolution();
+        
 
-        return null;
+        
     }
-}
+    public int nombreNA(){
+        int k = 0 ;
+        for (Noeud n:listNoeud){
+            if (n instanceof Noeud_appui){
+                k++;
+            }
+        }
+            return k ;
+        }
+    }
+

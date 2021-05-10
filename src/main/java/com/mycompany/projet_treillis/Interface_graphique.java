@@ -26,9 +26,13 @@ import com.mycompany.treillis.Triangle_terrain;
 import com.mycompany.treillis.TypeBar;
 import java.io.IOException;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.TextArea;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -58,6 +62,7 @@ public class Interface_graphique extends BorderPane{
     protected GridPane PaneDialogSave;
     protected GridPane PaneDialogLoad;
     protected GridPane PaneDialogAD;
+    protected GridPane PaneDialogType;
     
     protected Dialog<String> dialogError;
     protected Dialog<String> dialogTT;
@@ -65,6 +70,10 @@ public class Interface_graphique extends BorderPane{
     protected Dialog<String> dialogSave;
     protected Dialog<String> dialogLoad;
     protected Dialog<String> dialogAD;
+    protected Dialog<String> dialogType;
+    
+    protected Alert alertSuccesSave;
+    protected Alert alertSuccesLoad;
     
     protected ButtonType bcancel;
     protected ButtonType type;
@@ -88,7 +97,13 @@ public class Interface_graphique extends BorderPane{
     protected Button bAppuiDouble;
     protected Button bloadFile;
     protected Button bmatrice;
+    protected Button bType;    
     
+    protected TextField tcout;
+    protected TextField tlmax;
+    protected TextField tlmin;
+    protected TextField trtraction;
+    protected TextField trcompression;
     protected TextField tpointx;
     protected TextField tpointy;
     protected TextField tSegPoint1;
@@ -102,9 +117,10 @@ public class Interface_graphique extends BorderPane{
     protected TextField tAppui2TT;
     protected TextField tAppui2Pos;
     protected TextField tAppui2Numero;
-    
     protected TextField tsave;
     protected TextField tload;
+    
+    protected TextArea textarea;
     
             
     
@@ -116,6 +132,7 @@ public class Interface_graphique extends BorderPane{
     protected VBox h6;
     protected VBox h7;
     protected VBox h8;
+    protected VBox h9;
     
     protected Label lerror;
     protected Label lx;
@@ -133,22 +150,37 @@ public class Interface_graphique extends BorderPane{
          bpoint.setDisable(true);
          bpoint.setToggleGroup(tgState);
          bcreateP=new Button ("Create Point");
+         bcreateP.setEffect(new DropShadow());
          bcreateNS=new Button("Create Noeud Simple");
+         bcreateNS.setEffect(new DropShadow());
          bcreateSeg=new Button("Create segment");
+         bcreateSeg.setEffect(new DropShadow());
          bcreateBar=new Button("Create Barre");
-         
+         bcreateBar.setEffect(new DropShadow());         
          bsave= new Button("Save");
          bsave.setStyle("-fx-background-color: MediumSeaGreen");
+         bsave.setEffect(new DropShadow());
          bAppuiSimple=new Button("Appui Simple");
+         bAppuiSimple.setEffect(new DropShadow());
+         bAppuiSimple.setStyle("-fx-font-weight: bold;");
          bAppuiDouble=new Button("Appui Double");
+         bAppuiDouble.setEffect(new DropShadow());
+         bAppuiDouble.setStyle("-fx-font-weight: bold;");
          
-         
+         //un TextArea pour ecrire les caractersistiques des differents attribut
+        textarea =new TextArea();
+        textarea.setPrefWidth(100);
+        textarea.setPrefHeight(500);
         
+        alertSuccesSave=new Alert(AlertType.INFORMATION,"The file was succesfully saved!",ButtonType.OK);
+        alertSuccesLoad=new Alert(AlertType.INFORMATION,"The file was succesfully loaded",ButtonType.OK);
          
          
          bload=new Button("Load");
+         bload.setEffect(new DropShadow());
          bload.setStyle("-fx-background-color: Aqua");
          bcreateTT=new Button("Create Triangle");
+         bcreateTT.setEffect(new DropShadow());
          bsegment = new RadioButton("SEGMENT");
          bsegment.setDisable(true);
          bsegment.setToggleGroup(tgState);
@@ -163,20 +195,32 @@ public class Interface_graphique extends BorderPane{
          bnoeudAD.setDisable(true);
          bcouleur = new Button("Couleur");
          bclear = new Button("Clear");
+         bclear.setEffect(new DropShadow());
          bclear.setStyle("-fx-border-color: #ff0000; -fx-border-width: 5px;");
          bclear.setStyle("-fx-background-color: Red");
          bTT=new Button("Triangle terrain");
+         bTT.setEffect(new DropShadow());
+         bTT.setStyle("-fx-font-weight: bold;");
          bST=new Button("Segment Terrain");
          bTreillis=new Button("Nouveau Treillis");
+         bTreillis.setEffect(new DropShadow());
          bTreillis.setStyle("-fx-text-fill: #0000ff");
          bcreateNAS=new Button("Create Appui Simple");
+         bcreateNAS.setEffect(new DropShadow());
+       
          bcancel=ButtonType.CANCEL;
-         bsaveFile=new Button("save file");
+         bsaveFile=new Button("Save File");
+         bsaveFile.setEffect(new DropShadow());
          bsaveFile.setStyle("-fx-background-color: MediumSeaGreen");
-         bloadFile=new Button("load file");
+         bloadFile=new Button("Load File");
          bloadFile.setStyle("-fx-background-color: Aqua");
-         bcreateNAD=new Button("create Appui double");
+         bloadFile.setEffect(new DropShadow());
+         bcreateNAD=new Button("Create Appui double");
+         bcreateNAD.setEffect(new DropShadow());
          bmatrice=new Button("Calculer matrice");
+         bmatrice.setEffect(new DropShadow());
+         bType=new Button("Set Type");
+         bType.setEffect(new DropShadow());
          
          
          lerror=new Label("ERREUR DE SAISIE");
@@ -201,10 +245,10 @@ public class Interface_graphique extends BorderPane{
          tpointy.setPromptText("y ");
          
          tSegPoint1=new TextField();
-         tSegPoint1.setPromptText("indice Point1 ");
+         tSegPoint1.setPromptText("indice Point/Noeud 1 ");
          
          tSegPoint2=new TextField();
-         tSegPoint2.setPromptText("indice Point 2");
+         tSegPoint2.setPromptText("indice Point/Noeud 2");
          
          tTriangle1=new TextField();
          tTriangle1.setPromptText("indice pt1");
@@ -238,7 +282,22 @@ public class Interface_graphique extends BorderPane{
          
          tload=new TextField();
          tload.setPromptText("C:\\USER\\...\\filename.txt");
-       
+         
+         tcout=new TextField();
+         tcout.setPromptText("cout barre");
+         
+         tlmax=new TextField();
+         tlmax.setPromptText("longueur maximale");
+         
+         tlmin=new TextField();
+         tlmin.setPromptText("longueur minimale");
+         
+         trtraction=new TextField();
+         trtraction.setPromptText("resistance traction");
+         
+         trcompression=new TextField();
+         trcompression.setPromptText("resistance compression");
+         
          PaneDialog=new GridPane();
          PaneDialog.setPrefSize(300, 300);
          PaneDialogAS=new GridPane();
@@ -251,25 +310,26 @@ public class Interface_graphique extends BorderPane{
          PaneDialogLoad.setPrefSize(200, 100);
          PaneDialogAD=new GridPane();
          PaneDialogAD.setPrefSize(300, 300);
-         
+         PaneDialogType=new GridPane();
+         PaneDialogType.setPrefSize(300,300);
          
          h1=new HBox(bpoint , bsegment,bnoeudS,bnoeudAS,bnoeudAD);
          h5 = new HBox(lx,tpointx,ly,tpointy,bcreateP,bcreateNS);
          h5.getStyleClass().add("jfx-decorator-buttons-container");
-         h5.setBackground(new Background(new BackgroundFill(Color.LIGHTYELLOW,
+         h5.setBackground(new Background(new BackgroundFill(Color.LIGHTSEAGREEN,
     CornerRadii.EMPTY,
     Insets.EMPTY)));
-         h5.setSpacing(5);
+         h5.setSpacing(10);
          
-         h3= new VBox(bTreillis,bTT,bAppuiSimple,bAppuiDouble,bclear,bsaveFile,bloadFile,bmatrice);
+         h3= new VBox(bTreillis,bTT,bAppuiSimple,bAppuiDouble,bclear,bsaveFile,bloadFile,bmatrice,textarea);
          h3.setSpacing(5);
-         h3.setBackground(new Background(new BackgroundFill(Color.LIGHTYELLOW,
+         h3.setBackground(new Background(new BackgroundFill(Color.LIGHTSEAGREEN,
     CornerRadii.EMPTY,Insets.EMPTY)));
          h4=new VBox(h1,h5);
          h2=new HBox(lSegPoint1,tSegPoint1,lSegPoint2,tSegPoint2,bcreateSeg,bcreateBar);
-         h2.setSpacing(5);
+         h2.setSpacing(10);
          h2.getStyleClass().add("jfx-decorator-buttons-container");
-         h2.setBackground(new Background(new BackgroundFill(Color.LIGHTYELLOW,
+         h2.setBackground(new Background(new BackgroundFill(Color.LIGHTSEAGREEN,
     CornerRadii.EMPTY,
     Insets.EMPTY)));
          h6=new VBox(tTriangle1,tTriangle2,tTriangle3,bcreateTT);
@@ -277,6 +337,8 @@ public class Interface_graphique extends BorderPane{
          h7=new VBox(tAppuiTT,tAppuiNumero,tAppuiPos,bcreateNAS);
          h7.setSpacing(5);
          h8=new VBox(tAppui2TT,tAppui2Numero,tAppui2Pos,bcreateNAD);
+         h9=new VBox(tcout,tlmax,tlmin,trtraction,trcompression,bType);
+         h9.setSpacing(5);
          
          PaneDialog.getChildren().add(h6);
          dialogTT=new Dialog<String>();
@@ -325,6 +387,13 @@ public class Interface_graphique extends BorderPane{
          dialogLoad.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
          dialogLoad.getDialogPane().setContent(PaneDialogLoad);
          
+         PaneDialogType.getChildren().add(h9);
+         dialogType=new Dialog<String>();
+         dialogType.setTitle("Set Bar Type");
+         dialogType.setHeaderText("Set up the type for the bar");
+         dialogType.getDialogPane().setContent(PaneDialogType);
+         dialogType.getDialogPane().getButtonTypes().add(ButtonType.OK);
+         
          
          
          
@@ -354,15 +423,28 @@ public class Interface_graphique extends BorderPane{
     }
         }
     });
+  /*  bType.setOnAction(new EventHandler<ActionEvent>(){
+        @Override public void handle(ActionEvent e){
+            double prix=Double.parseDouble(tcout.getText());
+            double lma=Double.parseDouble(tlmax.getText());
+            double lmi=Double.parseDouble(tlmin.getText());
+            double rt=Double.parseDouble(trtraction.getText());
+            double rc=Double.parseDouble(trcompression.getText());
+            treillis.t
+        }
+            
+        });
+*/
     bmatrice.setOnAction(new EventHandler<ActionEvent>(){
         @Override public void handle(ActionEvent e){
-            treillis.calculMatrice1();
+            System.out.println(treillis.calculMatrice1().toString());
         }
     });
     bclear.setOnAction(new EventHandler<ActionEvent>(){
         @Override public void handle(ActionEvent e){
             zonedessin.clear();
             Disable();   
+            textarea.clear();   
         }
     });
     bload.setOnAction(new EventHandler<ActionEvent>(){
@@ -370,7 +452,8 @@ public class Interface_graphique extends BorderPane{
             try{
                 String s=tload.getText();    
             treillis.load(zonedessin.canvas.getGraphicsContext2D(),s);
-        
+        dialogLoad.close();
+        alertSuccesLoad.showAndWait();
             }catch (IOException ioe) {
 	   ioe.printStackTrace();
            showError();
@@ -419,12 +502,28 @@ public class Interface_graphique extends BorderPane{
             Noeud n1=(Noeud)treillis.listNoeud.get(indice1);
             
             Noeud n2=(Noeud)treillis.listNoeud.get(indice2);
+            Barre b;
             
             //System.out.println(n1.getId());
            // System.out.println(n2.getId());
            
            //assurer l'unicite de la barre
-           Barre b=new Barre(n1,n2);
+           dialogType.showAndWait();
+          
+           
+            b=new Barre(n1,n2);
+             bType.setOnAction(new EventHandler<ActionEvent>(){
+        @Override public void handle(ActionEvent e){
+            double prix=Double.parseDouble(tcout.getText());
+            double lma=Double.parseDouble(tlmax.getText());
+            double lmi=Double.parseDouble(tlmin.getText());
+            double rt=Double.parseDouble(trtraction.getText());
+            double rc=Double.parseDouble(trcompression.getText());
+            b.getType().setType(prix, lma, lmi, rt, rc);
+            dialogType.hide();
+            
+        }
+        });
            int i=0;
            for(Barre barre:treillis.listBar){
                
@@ -436,6 +535,7 @@ public class Interface_graphique extends BorderPane{
             b.drawBarre(zonedessin.canvas.getGraphicsContext2D());
             addBarre(b);
             addTypebar(b.getType());
+             textarea.appendText("Barre"+treillis.listBar.indexOf(b)+";"+indice1+";"+indice2+"\n");
            }
         }
         catch(Exception io){
@@ -449,7 +549,9 @@ public class Interface_graphique extends BorderPane{
         Point p=new Point(Double.parseDouble(tpointx.getText()),Double.parseDouble(tpointy.getText()));
         
         p.draw(zonedessin.canvas.getGraphicsContext2D());
-       addPointMain(p);     
+       addPointMain(p);    
+       //affiche les caracteristiques du point dans le textarea
+       textarea.appendText("P "+treillis.listPoint.indexOf(p)+"("+p.getPx()+","+p.getPy()+")/n");
     }
      });
     //creer un segment a partir des indices de deux points
@@ -481,6 +583,7 @@ public class Interface_graphique extends BorderPane{
             
             Appui_simple n=new Appui_simple(t,numero,pos);
             addAppui(n);
+             textarea.appendText("NAS;"+treillis.listNoeud.indexOf(n)+";"+indiceTT+";"+pos+";"+numero+"\n");
             n.drawNoeud(zonedessin.canvas.getGraphicsContext2D());
         }
     });
@@ -495,6 +598,7 @@ public class Interface_graphique extends BorderPane{
             
             Appui_double n=new Appui_double(t,numero,pos);
             addAppui(n);
+            textarea.appendText("NAD;"+treillis.listNoeud.indexOf(n)+";"+indiceTT+";"+pos+";"+numero+"\n");
             n.drawNoeud(zonedessin.canvas.getGraphicsContext2D());
         }
             
@@ -515,6 +619,7 @@ public class Interface_graphique extends BorderPane{
             Triangle_terrain t =new Triangle_terrain(p1,p2,p3);
             t.drawTriangle(zonedessin.canvas.getGraphicsContext2D());
             addTT(t);
+            textarea.appendText("TT;"+treillis.listTriangle.indexOf(t)+";"+indice1+";"+indice2+";"+indice3+"\n");
             }catch(Exception io){
                 showError();
             }
@@ -527,6 +632,7 @@ public class Interface_graphique extends BorderPane{
         
         n.drawNoeud(zonedessin.canvas.getGraphicsContext2D());
         addNoeudSimple(n);
+        textarea.appendText("NS;"+treillis.listNoeud.indexOf(n)+";("+n.getPx()+","+n.getPy()+")\n");
         
     }
      });
@@ -544,6 +650,8 @@ bsave.setOnAction(new EventHandler<ActionEvent>(){
             try{
                 String s =tsave.getText();   
             treillis.save(s);
+            dialogSave.close();
+            alertSuccesSave.showAndWait();
         }catch (IOException ioe) {
 	   ioe.printStackTrace();
            showError();

@@ -38,6 +38,8 @@ public class Barre {
         type=typeb;
         n1=N1;
         n2=N2;
+        n1.bConcour.add(this);
+        n2.bConcour.add(this);
     }
     //determiner la longueur d'une barre
     public double barLenght() {
@@ -73,6 +75,7 @@ public class Barre {
         gc.strokeLine(n1.getPx(), n1.getPy(), n2.getPx(), n2.getPy());
 
     }
+
 
     public void save(BufferedWriter out) throws IOException {
         //format barre;id;Typebar.id;n1.id;n2.id
