@@ -114,6 +114,7 @@ public class Treillis {
             }
 
         }
+        //trouver le minimun du tableau qui est le xmin
         terrain.xmin = (float) xPoint[imin];
         for (int j = 1; j < xPoint.length; j++) {
             xmax = xPoint[0];
@@ -124,6 +125,7 @@ public class Treillis {
             }
 
         }
+        //trouver le maximum du tableau qui est le xmax
         terrain.xmax = (float) xPoint[imax];
         for (int j = 1; j < xPoint.length; j++) {
             ymin = yPoint[0];

@@ -26,6 +26,7 @@ import com.mycompany.treillis.Triangle_terrain;
 import com.mycompany.treillis.TypeBar;
 import java.io.IOException;
 import javafx.geometry.Insets;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -551,9 +552,12 @@ public class Interface_graphique extends BorderPane{
     bcreateP.setOnAction(new EventHandler<ActionEvent>(){
          @Override public void handle(ActionEvent e){
         Point p=new Point(Double.parseDouble(tpointx.getText()),Double.parseDouble(tpointy.getText()));
-        
-        p.draw(zonedessin.canvas.getGraphicsContext2D());
-       addPointMain(p);    
+        GraphicsContext gc=zonedessin.canvas.getGraphicsContext2D();
+        p.draw(gc);
+       addPointMain(p);   
+       gc.setStroke(Color.AQUA);
+       gc.strokeText(""+treillis.listPoint.indexOf(p), p.getPx()-10, p.getPy()-10);
+       
        //affiche les caracteristiques du point dans le textarea
        textarea.appendText("P "+treillis.listPoint.indexOf(p)+"("+p.getPx()+","+p.getPy()+")\n");
     }
@@ -587,6 +591,8 @@ public class Interface_graphique extends BorderPane{
             
             Appui_simple n=new Appui_simple(t,numero,pos);
             addAppui(n);
+        zonedessin.canvas.getGraphicsContext2D().setStroke(Color.BLACK);
+        zonedessin.canvas.getGraphicsContext2D().strokeText(""+treillis.listNoeud.indexOf(n), n.getPx()-10, n.getPy()-10);
              textarea.appendText("NAS;"+treillis.listNoeud.indexOf(n)+";"+indiceTT+";"+pos+";"+numero+"\n");
             n.drawNoeud(zonedessin.canvas.getGraphicsContext2D());
         }
@@ -602,6 +608,8 @@ public class Interface_graphique extends BorderPane{
             
             Appui_double n=new Appui_double(t,numero,pos);
             addAppui(n);
+        zonedessin.canvas.getGraphicsContext2D().setStroke(Color.BLACK);
+        zonedessin.canvas.getGraphicsContext2D().strokeText(""+treillis.listNoeud.indexOf(n), n.getPx()-10, n.getPy()-10);
             textarea.appendText("NAD;"+treillis.listNoeud.indexOf(n)+";"+indiceTT+";"+pos+";"+numero+"\n");
             n.drawNoeud(zonedessin.canvas.getGraphicsContext2D());
         }
@@ -636,6 +644,8 @@ public class Interface_graphique extends BorderPane{
         
         n.drawNoeud(zonedessin.canvas.getGraphicsContext2D());
         addNoeudSimple(n);
+        zonedessin.canvas.getGraphicsContext2D().setStroke(Color.BLACK);
+        zonedessin.canvas.getGraphicsContext2D().strokeText(""+treillis.listNoeud.indexOf(n), n.getPx()-10, n.getPy()-10);
         textarea.appendText("NS;"+treillis.listNoeud.indexOf(n)+";("+n.getPx()+","+n.getPy()+")\n");
         
     }
