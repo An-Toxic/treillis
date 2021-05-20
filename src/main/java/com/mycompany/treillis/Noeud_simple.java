@@ -43,7 +43,7 @@ public class Noeud_simple extends Noeud {
     public void drawNoeud(GraphicsContext gc) {
 
         gc.setStroke(Color.BLACK.darker());
-        gc.fillOval(Nx, Ny, 8, 8);
+        gc.fillOval(Nx, Ny, 10, 10);
 
     }
 

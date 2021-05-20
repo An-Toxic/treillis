@@ -54,9 +54,9 @@ public void setId(int identite){
         try {
             out.append("Triangle;");
             out.append(id + ";(");
-            out.append(pt1.px + "," + pt1.py + ");(");
-            out.append(pt2.px + "," + pt2.py + ");(");
-            out.append(pt3.px + "," + pt3.py + ")\n");
+            out.append((float)pt1.px + "," + (float)pt1.py + ");(");
+            out.append((float)pt2.px + "," + (float)pt2.py + ");(");
+            out.append((float)pt3.px + "," + (float)pt3.py + ")\n");
 
         } catch (IOException ioe) {
             ioe.printStackTrace();

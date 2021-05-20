@@ -337,6 +337,7 @@ public class Interface_graphique extends BorderPane{
          h7=new VBox(tAppuiTT,tAppuiNumero,tAppuiPos,bcreateNAS);
          h7.setSpacing(5);
          h8=new VBox(tAppui2TT,tAppui2Numero,tAppui2Pos,bcreateNAD);
+         h8.setSpacing(5);
          h9=new VBox(tcout,tlmax,tlmin,trtraction,trcompression,bType);
          h9.setSpacing(5);
          
@@ -435,11 +436,13 @@ public class Interface_graphique extends BorderPane{
             
         });
 */
+  //calcul la matrice de treillis correspondante
     bmatrice.setOnAction(new EventHandler<ActionEvent>(){
         @Override public void handle(ActionEvent e){
-            System.out.println(treillis.calculMatrice1().toString());
+            System.out.println(treillis.calculMatrice().toString());
         }
     });
+    //efface tout les elements sur le canvas et le textarea
     bclear.setOnAction(new EventHandler<ActionEvent>(){
         @Override public void handle(ActionEvent e){
             zonedessin.clear();
@@ -453,6 +456,7 @@ public class Interface_graphique extends BorderPane{
                 String s=tload.getText();    
             treillis.load(zonedessin.canvas.getGraphicsContext2D(),s);
         dialogLoad.close();
+        //affiche le alert de la reussite
         alertSuccesLoad.showAndWait();
             }catch (IOException ioe) {
 	   ioe.printStackTrace();
@@ -551,7 +555,7 @@ public class Interface_graphique extends BorderPane{
         p.draw(zonedessin.canvas.getGraphicsContext2D());
        addPointMain(p);    
        //affiche les caracteristiques du point dans le textarea
-       textarea.appendText("P "+treillis.listPoint.indexOf(p)+"("+p.getPx()+","+p.getPy()+")/n");
+       textarea.appendText("P "+treillis.listPoint.indexOf(p)+"("+p.getPx()+","+p.getPy()+")\n");
     }
      });
     //creer un segment a partir des indices de deux points

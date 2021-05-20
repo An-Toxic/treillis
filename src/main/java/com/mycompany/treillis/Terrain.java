@@ -10,10 +10,14 @@ package com.mycompany.treillis;
  * @author cz
  */
 public class Terrain {
-    protected double xmin;
-    protected double xmax;
-    protected double ymin;
-    protected double ymax;
+    protected float xmin;
+    protected float xmax;
+    protected float ymin;
+    protected float ymax;
+        
+        public Terrain(){
+            
+        }
        
              
   

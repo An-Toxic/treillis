@@ -21,7 +21,7 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class Treillis {
 
-    public Terrain T;
+   
     public ArrayList<Barre> listBar;
     public ArrayList<Noeud> listNoeud;
     public ArrayList<TypeBar> catalogue;
@@ -29,6 +29,7 @@ public class Treillis {
     public ArrayList<Triangle_terrain> listTriangle;
     protected Numerator num;
     public Matrice matrice;
+    protected Terrain terrain;
 
     public Treillis() {
         num = new Numerator(0);
@@ -37,6 +38,7 @@ public class Treillis {
         listPoint = new ArrayList<Point>();
         listTriangle = new ArrayList<Triangle_terrain>();
         catalogue = new ArrayList<TypeBar>();
+        terrain = new Terrain();
 
     }
 
@@ -79,8 +81,76 @@ public class Treillis {
         return this.listNoeud;
     }
 
+    //definir les dimensions de la zone constructible
+    public void setZoneConstructible() {
+        double[] xPoint = new double[listTriangle.size() * 3];
+        double[] yPoint = new double[listTriangle.size() * 3];
+        int i = 0;
+        for (Triangle_terrain t : listTriangle) {
+            xPoint[i] = t.pt1.px;
+            yPoint[i] = t.pt1.py;
+            i++;
+            xPoint[i] = t.pt2.px;
+            yPoint[i] = t.pt2.py;
+            i++;
+            xPoint[i] = t.pt3.px;
+            yPoint[i] = t.pt3.py;
+
+        }
+        int imin = 0;
+        double xmin;
+        int imax = 0;
+        double xmax;
+        int iymin = 0;
+        int iymax = 0;
+        double ymin;
+        double ymax;
+        for (int j = 1; j < xPoint.length; j++) {
+            xmin = xPoint[0];
+
+            if (xmin > xPoint[i]) {
+                imin = i;
+                xmin = xPoint[i];
+            }
+
+        }
+        terrain.xmin = (float) xPoint[imin];
+        for (int j = 1; j < xPoint.length; j++) {
+            xmax = xPoint[0];
+
+            if (xmax < xPoint[i]) {
+                imax = i;
+                xmax = xPoint[i];
+            }
+
+        }
+        terrain.xmax = (float) xPoint[imax];
+        for (int j = 1; j < xPoint.length; j++) {
+            ymin = yPoint[0];
+
+            if (ymin > yPoint[i]) {
+                iymin = i;
+                ymin = yPoint[i];
+            }
+
+        }
+        terrain.ymin = (float) yPoint[iymin];
+        for (int j = 1; j < yPoint.length; j++) {
+            ymax = yPoint[0];
+
+            if (ymax < yPoint[i]) {
+                iymax = i;
+                ymax = yPoint[i];
+            }
+
+        }
+        terrain.ymax = (float) yPoint[iymax];
+
+    }
+
     public void save(String path) throws IOException {
         BufferedWriter out = null;
+        setZoneConstructible();
         try {
             File file = new File(path);
             //si le file n'existe pas on cree un nouveau file 
@@ -90,6 +160,8 @@ public class Treillis {
             FileWriter fw = new FileWriter(file);
             out = new BufferedWriter(fw);
             //pour chaque TT on ecrit dans le file 
+            out.append("ZoneConstructible;" + terrain.xmin + ";" + terrain.xmax + ";"
+                    + terrain.ymin + ";" + terrain.ymax + "\n");
             for (Triangle_terrain t : listTriangle) {
                 t.save(out);
             }
@@ -134,6 +206,12 @@ public class Treillis {
                 String[] string = s.split(";");
                 System.out.println(string);
                 //lire les noeuds simple et les represnter
+                if (string[0].equals("ZoneConstructible")) {
+                    terrain.xmin = Float.parseFloat(string[1]);
+                    terrain.xmax = Float.parseFloat(string[2]);
+                    terrain.ymin = Float.parseFloat(string[3]);
+                    terrain.ymax = Float.parseFloat(string[4]);
+                }
                 if (string[0].equals("NoeudSimple")) {
                     int identite = Integer.parseInt(string[1]);
                     String res = string[2].substring(1, string[2].length() - 1);
@@ -194,20 +272,19 @@ public class Treillis {
                     addBarre(b);
                     b.drawBarre(gc);
                 }
-                if (string[0].equals("TypeBarre")){
+                if (string[0].equals("TypeBarre")) {
                     int identite = Integer.parseInt(string[1]);
-                    double cout =Double.parseDouble(string[2]);
+                    double cout = Double.parseDouble(string[2]);
                     double lmin = Double.parseDouble(string[3]);
-                    double lmax=Double.parseDouble(string[4]);
-                    double rt=Double.parseDouble(string[5]);
-                    double rc=Double.parseDouble(string[6]);
-                    
-                    TypeBar typeb=new TypeBar(identite,lmax,lmin,rt,rc);
+                    double lmax = Double.parseDouble(string[4]);
+                    double rt = Double.parseDouble(string[5]);
+                    double rc = Double.parseDouble(string[6]);
+
+                    TypeBar typeb = new TypeBar(identite, lmax, lmin, rt, rc);
                     this.addTypebar(typeb);
                     num.objtoKey.put(typeb, identite);
-                    num.keytoObj.put(identite,typeb);
-                    
-                    
+                    num.keytoObj.put(identite, typeb);
+
                 }
                 if (string[0].equals("Triangle")) {
                     int identite = Integer.parseInt(string[1]);
@@ -245,17 +322,22 @@ public class Treillis {
     }
 //calcul la matrice des inconnues du treillis
 
-    public Matrice calculMatrice1() {
-        matrice = new Matrice(2 * listNoeud.size(), listNoeud.size() +this.nombreNA());
+    public Matrice calculMatrice() {
+        matrice = new Matrice(2 * listNoeud.size(), listNoeud.size() + this.nombreNA());
+        Matrice secondMembre = new Matrice(matrice.nbrLig, 1);
         //pour chaque noeud du treillis on remplit deux lignes de la matrice
+        int i = 0;
+        int AD=0;
+        int AS=0;
         for (Noeud s : listNoeud) {
-            int i = 0;
+
             if (s instanceof Noeud_simple) {
                 for (int j = 0; j < ((Noeud_simple) s).bConcour.size(); j++) {
                     Barre b = ((Noeud_simple) s).bConcour.get(j);
 
                     matrice.coeffs[i][listBar.indexOf(b)] = Math.cos(b.getAlpha());
                     matrice.coeffs[i + 1][listBar.indexOf(b)] = Math.sin(b.getAlpha());
+
                 }
 
             }
@@ -264,8 +346,11 @@ public class Treillis {
                     Barre b = ((Appui_simple) s).bConcour.get(j);
                     matrice.coeffs[i][listBar.indexOf(b)] = Math.cos(b.getAlpha());
                     matrice.coeffs[i + 1][listBar.indexOf(b)] = Math.sin(b.getAlpha());
-                    matrice.coeffs[i][matrice.nbrCol - 1] = Math.cos(((Appui_simple) s).getBeta());
-                    matrice.coeffs[i + 1][matrice.nbrCol - 1] = Math.sin(((Appui_simple) s).getBeta());
+                    matrice.coeffs[i][matrice.nbrCol - 1-AS] = Math.cos(((Appui_simple) s).getBeta());
+                    matrice.coeffs[i + 1][matrice.nbrCol - 1-AS] = Math.sin(((Appui_simple) s).getBeta());
+                    secondMembre.coeffs[i][0] = 1000;
+                    AS++;
+
                 }
             }
             if (s instanceof Appui_double) {
@@ -273,8 +358,10 @@ public class Treillis {
                     Barre b = ((Appui_double) s).bConcour.get(j);
                     matrice.coeffs[i][listBar.indexOf(b)] = Math.cos(b.getAlpha());
                     matrice.coeffs[i + 1][listBar.indexOf(b)] = Math.sin(b.getAlpha());
-                    matrice.coeffs[i][listNoeud.size()] = 1;
-                    matrice.coeffs[i + 1][listNoeud.size()] = 1;
+                    matrice.coeffs[i][listNoeud.size()+AD] = 1;
+                    matrice.coeffs[i + 1][listNoeud.size()+AD] = 1;
+                    AD++;
+
                 }
 
             }
@@ -282,28 +369,47 @@ public class Treillis {
 
         }
         matrice.toString();
-        return matrice;
+        Matrice mfinale = matrice.concatCol(secondMembre);
+        //mfinale.resolution();
+        return mfinale;
     }
-   
 
-    public ResSys resMatrice2() {
-        double[] tab = new double[calculMatrice1().nbrLig];
+    public ResSys resMatrice() {
+        double[] tab = new double[calculMatrice().nbrLig];
         Matrice second = Matrice.creeVecteur(tab);
-        
-        Matrice fin=calculMatrice1().concatCol(second);
-        return fin.resolution();
-        
 
-        
+        Matrice fin = calculMatrice().concatCol(second);
+        return fin.resolution();
+
     }
-    public int nombreNA(){
-        int k = 0 ;
-        for (Noeud n:listNoeud){
-            if (n instanceof Noeud_appui){
+
+    public int nombreNA() {
+        int k = 0;
+        for (Noeud n : listNoeud) {
+            if (n instanceof Noeud_appui) {
                 k++;
             }
         }
-            return k ;
-        }
+        return k;
     }
 
+    public int nombreAS() {
+        int k = 0;
+        for (Noeud n : listNoeud) {
+            if (n instanceof Appui_simple) {
+                k++;
+            }
+        }
+        return k;
+    }
+      public int nombreAD() {
+        int k = 0;
+        for (Noeud n : listNoeud) {
+            if (n instanceof Appui_double) {
+                k++;
+            }
+        }
+        return k;
+    }
+    
+}

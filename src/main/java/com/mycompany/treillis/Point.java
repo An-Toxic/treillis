@@ -79,8 +79,8 @@ public class Point {
     }
     public void draw(GraphicsContext gc){
         
-        gc.setFill(Color.BLUE);
-        gc.fillOval(this.px,this.py,5,5);
+        gc.setFill(Color.AQUA);
+        gc.fillOval(this.px,this.py,8,8);
     }
     public int getId(){
         return id;

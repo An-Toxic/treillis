@@ -62,39 +62,42 @@ public class CanvasResizable extends StackPane {
     //un deuxieme point est place sur la fin de la drag
 
     public void drawLine() {
-        if(mainInterface.bsegment.isSelected()){
+        
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
-        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,(MouseEvent me) ->{ 
+            if(mainInterface.bsegment.isSelected()){
+            
 
-            @Override
+           // @Override
 
-            public void handle(MouseEvent mouse) {
+            //public void handle(MouseEvent mouse) {
                 gc.setLineWidth(3);
 
                 gc.beginPath();
-                gc.moveTo(mouse.getX(), mouse.getY());
-                Point p=new Point(mouse.getX(),mouse.getY());
-                GraphicsContext gc=canvas.getGraphicsContext2D();
+                gc.moveTo(me.getX(), me.getY());
+                Point p=new Point(me.getX(),me.getY());
+                
                 p.draw(gc);
                 mainInterface.addPointMain(p);
 
-            }
+            
+            } 
         });
-        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouse) {
-
-                gc.lineTo(mouse.getX(), mouse.getY());
+        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED,(MouseEvent me) -> {
+            if(mainInterface.bsegment.isSelected()){
+           
+                gc.lineTo(me.getX(), me.getY());
+                gc.setStroke(Color.BLUE);
                 gc.stroke();
-                Point p2=new Point(mouse.getX(),mouse.getY());
-                GraphicsContext gc=canvas.getGraphicsContext2D();
+                Point p2=new Point(me.getX(),me.getY());
+               
                 p2.draw(gc);
                 mainInterface.addPointMain(p2);
+            
             }
-
         });
     }
-    }
+    
 
     //clears the canvas
     public void clear() {
@@ -112,28 +115,32 @@ public class CanvasResizable extends StackPane {
 
     //placer un point en clickant avec la souris
     public void placePoint() {
+        if(mainInterface.bpoint.isSelected()){
         DecimalFormat numberFormat = new DecimalFormat("#.0");
 
         this.canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent me) -> {
+            if(mainInterface.bpoint.isSelected()){
             final Point p;
             GraphicsContext gc = this.canvas.getGraphicsContext2D();
-            gc.setStroke(Color.AQUA);
-            gc.fillOval(me.getX(), me.getY(), 10, 10);
+            gc.setFill(Color.AQUA);
+            gc.fillOval(me.getX(), me.getY(), 8, 8);
             p = new Point(me.getX(), me.getY());
             mainInterface.addPointMain(p);
             mainInterface.textarea.appendText("P"+mainInterface.treillis.listPoint.indexOf(p)+
                     "("+numberFormat.format(p.getPx())+","+numberFormat.format(p.getPy())+")\n");
             System.out.println("x point"+p.getPx() + "y point " + p.getPy());
             System.out.println("id point"+p.getId());
-
+            }
         });
-
+        }
     }
 
     //placer un noeud simple en clickant avec la souris
     public void placeNoeudSimple() {
+        
         DecimalFormat numberFormat = new DecimalFormat("#.0");
         this.canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent me) -> {
+            if(mainInterface.bnoeudS.isSelected()){
             final Noeud_simple n;
             this.canvas.getGraphicsContext2D().setStroke(Color.BLACK);
             this.canvas.getGraphicsContext2D().fillOval(me.getX(), me.getY(), 15, 15);
@@ -142,7 +149,9 @@ public class CanvasResizable extends StackPane {
             mainInterface.textarea.appendText("NS"+mainInterface.treillis.listNoeud.indexOf(n)+
                     ";("+numberFormat.format(n.getPx())+","+numberFormat.format(n.getPy())+")\n");
             System.out.println("id noeud"+  n.getId());
+            }
         });
+    
     }
 
     public void redraw() {

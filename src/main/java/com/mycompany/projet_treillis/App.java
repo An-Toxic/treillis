@@ -14,7 +14,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-       stage.setTitle("test javafx");
+       stage.setTitle("Treillis");
        Scene scene = new Scene(new Interface_graphique());
        
        stage.sizeToScene();
